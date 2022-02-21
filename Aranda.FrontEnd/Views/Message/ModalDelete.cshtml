@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Modal";
+    Layout = null;
+}
+<script>
+    $("#general-modal").modal("show")
+</script>
+<div class="modal fade" id="general-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center">¿Estás seguro que quieres eliminar el producto?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:send('@ViewBag.ProductId')" class="btn btn-primary">Guardar Cambios</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //Delete
+    function send(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Message/Delete",
+            data: {
+                ProductId: id
+            },
+            success: function (data) {
+                debugger
+                $('#general-modal').modal('hide');
+                $.simplyToast('success', 'Registro eliminado correctamente');
+                window.location.reload();
+            },
+            error: function (request) {
+                $.simplyToast('warning', 'This is a warning message!');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Modal";
+    Layout = null;
+}
+<script>
+    $("#general-modal").modal("show")
+    $("#imageUrl").attr("src","Files/"+sessionStorage.getItem("ImageUrl"))
+</script>
+<div class="modal fade" id="general-modal" tabindex="-1" role="dialog"  data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="height:350px">
+                <div class="col-md-12">
+                    <img src="@ViewBag.Url" alt="Producto" id="imageUrl" class="img-fluid img-thumbnail"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:returnModal('@ViewBag.ProductId')" class="btn btn-default">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //Return
+    function returnModal(id) {
+        $('#general-modal').modal('hide');
+        if ($('.modal-backdrop').is(':visible')) {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        };
+        modalMessage("@Url.Action("ModalImages", "Message")", id);
+    }
+</script>

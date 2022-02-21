@@ -1,0 +1,72 @@
+﻿@model Aranda.FrontEnd.Models.ProductDetail
+@{
+    ViewBag.Title = "Modal";
+    Layout = null;
+}
+<script>
+    $("#general-modal").modal("show")
+</script>
+<div class="modal fade" id="general-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm(FormMethod.Post))
+                {
+                    <div class="form-group">
+                        @Html.TextBox("Name", @Model.ProductEdit.Name, new { @class = "form-control name" })
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control BriefDescription" name="BriefDescription" placeholder="Descripción">@Model.ProductEdit.BriefDescription </textarea>
+                    </div>
+                    <div class="form-group">
+                        <select name="CategoryId" class="form-control CategoryId">
+                            @foreach (Aranda.FrontEnd.Models.Category item in Model.Categories)
+                            {
+                                if (item.CategoryId == Model.ProductEdit.CategoryId)
+                                {
+                                    <option value="@item.CategoryId" selected>@item.CategoryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.CategoryId">@item.CategoryName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:send('@ViewBag.ProductId')" class="btn btn-primary">Guardar Cambios</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //Update
+    function send(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Message/Update",
+            data: {
+                Name: $(".name").val(),
+                BriefDescription: $(".BriefDescription").val(),
+                CategoryId: $(".CategoryId").val(),
+                ProductId: id
+            },
+            success: function (data) {
+                debugger
+                $('#general-modal').modal('hide');
+                $.simplyToast('success', 'Registro actualizado correctamente');
+                window.location.reload();
+            },
+            error: function (request) {
+                $.simplyToast('warning', 'This is a warning message!');
+            }
+        });
+    }
+</script>
